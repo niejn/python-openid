@@ -8,19 +8,26 @@ interesting.
 __all__ = ['log', 'appendArgs', 'toBase64', 'fromBase64', 'autoSubmitHTML', 'toUnicode']
 
 import binascii
-import sys
-import urlparse
 import logging
 
 from urllib import urlencode
 
 elementtree_modules = [
+    'defusedxml.lxml',
     'lxml.etree',
     'xml.etree.cElementTree',
     'xml.etree.ElementTree',
     'cElementTree',
     'elementtree.ElementTree',
     ]
+
+try:
+    import defusedxml
+    defusedxml.defuse_stdlib()
+except ImportError:
+    logging.warning('defusedxml not found! It is recommended that you install defusedxml '
+        'to avoid vulnerabilities related to XML parsing. For more details see '
+        'https://pypi.python.org/pypi/defusedxml/')
 
 def toUnicode(value):
     """Returns the given argument as a unicode object.
